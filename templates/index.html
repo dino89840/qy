@@ -2,48 +2,49 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>File Keep-Alive Dashboard</title>
+    <title>Link Keep-Alive & Checker</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; background: #f0f2f5; color: #333; }
-        .box { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h3 { color: #1c1e21; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button.add-btn { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .status-alive { color: #28a745; font-weight: bold; }
-        .status-dead { color: #dc3545; font-weight: bold; }
-        .btn-small { padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 12px; margin-right: 5px; }
-        .check-btn { background: #6c757d; color: white; }
-        .del-btn { background: #ff4d4d; color: white; }
+        body { font-family: sans-serif; padding: 20px; background: #f8f9fa; }
+        .box { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        input { width: 80%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        button.add-btn { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 13px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
+        .direct-url { color: #007bff; word-break: break-all; display: block; max-width: 300px; max-height: 50px; overflow-y: auto; background: #f1f1f1; padding: 5px; border-radius: 4px; }
+        .btn-small { padding: 5px 8px; border-radius: 4px; text-decoration: none; color: white; font-size: 11px; }
+        .check-btn { background: #17a2b8; }
+        .del-btn { background: #dc3545; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h3>File Management</h3>
-        <form action="/add" method="POST">
-            <input type="text" name="name" placeholder="ဖိုင်နာမည် (ဥပမာ - Movie 01)" required>
-            <input type="url" name="url" placeholder="Page URL ကို ကူးထည့်ပါ" required>
-            <button type="submit" class="add-btn">Add to Watchlist</button>
+        <h3>Keep-Alive Bot</h3>
+        <form action="/add" method="POST" style="text-align: center;">
+            <input type="url" name="url" placeholder="ဒီမှာ Download Page Link ကို ထည့်ပါ..." required>
+            <button type="submit" class="add-btn">Add</button>
         </form>
         <hr>
         <table>
             <tr>
-                <th>Name</th>
+                <th>File Name</th>
                 <th>Status</th>
+                <th>Direct Download Link (Real)</th>
                 <th>Action</th>
             </tr>
             {% for link in links %}
             <tr>
-                <td>{{ link.name }}</td>
+                <td><strong>{{ link.name }}</strong></td>
+                <td>{{ link.status }}</td>
                 <td>
-                    <span class="{{ 'status-alive' if 'Alive' in link.status or 'Active' in link.status else 'status-dead' }}">
-                        {{ link.status }}
-                    </span>
+                    {% if link.direct_link %}
+                    <code class="direct-url">{{ link.direct_link }}</code>
+                    {% else %}
+                    <small>Check ကို နှိပ်မှ ပေါ်မည်</small>
+                    {% endif %}
                 </td>
                 <td>
                     <a href="/check/{{ link.id }}" class="btn-small check-btn">Check</a>
-                    <a href="/delete/{{ link.id }}" class="btn-small del-btn" onclick="return confirm('ဖျက်မှာ သေချာလား?')">Del</a>
+                    <a href="/delete/{{ link.id }}" class="btn-small del-btn">Del</a>
                 </td>
             </tr>
             {% endfor %}
