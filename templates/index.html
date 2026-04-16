@@ -2,16 +2,17 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Link Keep-Alive & Checker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Checker Bot</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f8f9fa; }
-        .box { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        input { width: 80%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-        button.add-btn { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 13px; }
+        body { font-family: sans-serif; padding: 15px; background: #f0f2f5; }
+        .box { max-width: 95%; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        input { width: 70%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        button.add-btn { padding: 12px 20px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 12px; }
         th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
-        .direct-url { color: #007bff; word-break: break-all; display: block; max-width: 300px; max-height: 50px; overflow-y: auto; background: #f1f1f1; padding: 5px; border-radius: 4px; }
-        .btn-small { padding: 5px 8px; border-radius: 4px; text-decoration: none; color: white; font-size: 11px; }
+        .direct-url { color: #007bff; word-break: break-all; display: block; max-width: 250px; background: #f8f9fa; padding: 5px; border-radius: 4px; }
+        .btn { padding: 6px 10px; border-radius: 4px; text-decoration: none; color: white; font-size: 12px; display: inline-block; margin: 2px; }
         .check-btn { background: #17a2b8; }
         .del-btn { background: #dc3545; }
     </style>
@@ -20,35 +21,37 @@
     <div class="box">
         <h3>Keep-Alive Bot</h3>
         <form action="/add" method="POST" style="text-align: center;">
-            <input type="url" name="url" placeholder="ဒီမှာ Download Page Link ကို ထည့်ပါ..." required>
+            <input type="url" name="url" placeholder="Page Link ကို ထည့်ပါ..." required>
             <button type="submit" class="add-btn">Add</button>
         </form>
         <hr>
-        <table>
-            <tr>
-                <th>File Name</th>
-                <th>Status</th>
-                <th>Direct Download Link (Real)</th>
-                <th>Action</th>
-            </tr>
-            {% for link in links %}
-            <tr>
-                <td><strong>{{ link.name }}</strong></td>
-                <td>{{ link.status }}</td>
-                <td>
-                    {% if link.direct_link %}
-                    <code class="direct-url">{{ link.direct_link }}</code>
-                    {% else %}
-                    <small>Check ကို နှိပ်မှ ပေါ်မည်</small>
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="/check/{{ link.id }}" class="btn-small check-btn">Check</a>
-                    <a href="/delete/{{ link.id }}" class="btn-small del-btn">Del</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div style="overflow-x:auto;">
+            <table>
+                <tr>
+                    <th>File Name</th>
+                    <th>Status</th>
+                    <th>Real Link</th>
+                    <th>Action</th>
+                </tr>
+                {% for link in links %}
+                <tr>
+                    <td>{{ link.name }}</td>
+                    <td><b>{{ link.status }}</b></td>
+                    <td>
+                        {% if link.direct_link %}
+                        <code class="direct-url">{{ link.direct_link }}</code>
+                        {% else %}
+                        <small>Check ကို နှိပ်ပါ</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/check/{{ link.id }}" class="btn check-btn">Check</a>
+                        <a href="/delete/{{ link.id }}" class="btn del-btn" onclick="return confirm('ဖျက်မှာလား?')">Del</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 </body>
 </html>
