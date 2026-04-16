@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>File Keep-Alive Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; background: #f0f2f5; color: #333; }
+        .box { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h3 { color: #1c1e21; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button.add-btn { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .status-alive { color: #28a745; font-weight: bold; }
+        .status-dead { color: #dc3545; font-weight: bold; }
+        .btn-small { padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 12px; margin-right: 5px; }
+        .check-btn { background: #6c757d; color: white; }
+        .del-btn { background: #ff4d4d; color: white; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>File Management</h3>
+        <form action="/add" method="POST">
+            <input type="text" name="name" placeholder="ဖိုင်နာမည် (ဥပမာ - Movie 01)" required>
+            <input type="url" name="url" placeholder="Page URL ကို ကူးထည့်ပါ" required>
+            <button type="submit" class="add-btn">Add to Watchlist</button>
+        </form>
+        <hr>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for link in links %}
+            <tr>
+                <td>{{ link.name }}</td>
+                <td>
+                    <span class="{{ 'status-alive' if 'Alive' in link.status or 'Active' in link.status else 'status-dead' }}">
+                        {{ link.status }}
+                    </span>
+                </td>
+                <td>
+                    <a href="/check/{{ link.id }}" class="btn-small check-btn">Check</a>
+                    <a href="/delete/{{ link.id }}" class="btn-small del-btn" onclick="return confirm('ဖျက်မှာ သေချာလား?')">Del</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
